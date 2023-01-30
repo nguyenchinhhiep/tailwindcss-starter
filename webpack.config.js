@@ -3,10 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-// const pug = {
-//   test: /\.pug$/,
-//   use: ["pug-loader"],
-// };
+let production = process.env.NODE_ENV === "production";
 
 const scss = {
   test: /\.s[ac]ss$/i,
@@ -22,6 +19,9 @@ const scss = {
       loader: "postcss-loader",
       options: {
         sourceMap: true,
+        postcssOptions: {
+          plugins: [["postcss-preset-env", {}]],
+        },
       },
     },
     {
@@ -34,12 +34,12 @@ const scss = {
 };
 
 const images = {
-  test: /\.(png|svg|jpg|gif)$/,
+  test: /\.(png|svg|jpg|jpeg|gif)$/,
   use: [
     {
       loader: "file-loader",
       options: {
-        name: "[name].[ext]",
+        name: "[name][ext]",
         outputPath: "images/",
         publicPath: "images/",
       },
@@ -72,18 +72,34 @@ const js = {
   },
 };
 
-module.exports = {
+const ts = {
+  test: /\.ts$/,
+  exclude: /node_modules/,
+  use: {
+    loader: "ts-loader",
+  },
+};
+
+const imageAssets = {
+  test: /\.(png|svg|jpg|jpeg|gif)$/,
+  type: "asset/resource",
+  generator: {
+    filename: "images/[name][ext]",
+  },
+};
+
+const config = {
   entry: [
-    "babel-polyfill",
-    "./src/js/index.js",
+    // "babel-polyfill",
+    "./src/ts/index.ts",
     "./src/styles/__styles-dir.scss",
   ],
   output: {
-    filename: "[name].js",
+    filename: "main.js",
     path: path.resolve(__dirname, "dist"),
   },
   module: {
-    rules: [js, scss, images, fonts],
+    rules: [ts, scss, images, fonts],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -91,7 +107,7 @@ module.exports = {
       template: "src/index.html",
     }),
     new MiniCssExtractPlugin({
-      filename: "styles.css",
+      filename: "main.css",
     }),
     new CleanWebpackPlugin(),
   ],
@@ -100,5 +116,16 @@ module.exports = {
       directory: path.join(__dirname, "./dist"),
     },
   },
-  mode: 'development'
+  mode: "development",
+  devtool: "inline-source-map",
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
 };
+
+if (production) {
+  config.mode = "production";
+  config.devtool = "inline-source-map";
+}
+
+module.exports = config;

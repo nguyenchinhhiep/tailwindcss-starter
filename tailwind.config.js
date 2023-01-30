@@ -29,7 +29,7 @@ const themes = {
 };
 
 module.exports = {
-  content: ["./src/**/*.{html,scss,js}"],
+  content: ["./src/**/*.{html,scss,ts}"],
   darkMode: "class",
   theme: {
     extend: {},
