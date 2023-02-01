@@ -61,39 +61,19 @@ const fonts = {
   ],
 };
 
-const js = {
-  test: /\.js$/,
-  exclude: /node_modules/,
-  use: {
-    loader: "babel-loader",
-    options: {
-      presets: ["@babel/preset-env"],
-    },
-  },
-};
-
 const ts = {
   test: /\.ts$/,
   exclude: /node_modules/,
   use: {
-    loader: "ts-loader",
-  },
-};
-
-const imageAssets = {
-  test: /\.(png|svg|jpg|jpeg|gif)$/,
-  type: "asset/resource",
-  generator: {
-    filename: "images/[name][ext]",
+    loader: "babel-loader",
+    options: {
+      presets: ["@babel/preset-env", "@babel/preset-typescript"],
+    },
   },
 };
 
 const config = {
-  entry: [
-    // "babel-polyfill",
-    "./src/ts/index.ts",
-    "./src/styles/__styles-dir.scss",
-  ],
+  entry: ["./src/ts/index.ts", "./src/styles/__styles-dir.scss"],
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "dist"),
