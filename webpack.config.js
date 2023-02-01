@@ -95,6 +95,7 @@ const config = {
     static: {
       directory: path.join(__dirname, "./dist"),
     },
+    watchFiles: ["src/**/*.html"],
   },
   mode: "development",
   devtool: "inline-source-map",
