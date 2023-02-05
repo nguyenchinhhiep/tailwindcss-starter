@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 let production = process.env.NODE_ENV === "production";
 
@@ -73,7 +74,7 @@ const ts = {
 };
 
 const config = {
-  entry: ["./src/ts/index.ts", "./src/styles/__styles-dir.scss"],
+  entry: ["./src/index.ts", "./src/styles.scss"],
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "dist"),
@@ -88,6 +89,17 @@ const config = {
     }),
     new MiniCssExtractPlugin({
       filename: "main.css",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "src/assets",
+          to: "assets",
+          filter: (name) => {
+            return !name.endsWith("index.html");
+          },
+        },
+      ],
     }),
     new CleanWebpackPlugin(),
   ],
