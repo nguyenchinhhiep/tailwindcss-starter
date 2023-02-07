@@ -98,6 +98,7 @@ const config = {
           filter: (name) => {
             return !name.endsWith("index.html");
           },
+          noErrorOnMissing: true
         },
       ],
     }),
